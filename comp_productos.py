@@ -13,7 +13,7 @@ def BestPrice(n1: int, n2: int, n3: int):
 
 def PrintTable(table: pd.DataFrame):
     table.to_csv(r'C:/Users/ameri/Documents/Inventario/compare_list.csv', index=None, header=True, encoding='utf-8-sig')
-    print(f"\n{table[['Codigo','Producto', 'Precio 1', 'Precio 2', 'Precio 3', 'Mejor precio']]}")
+    print(f"\n{table[['Codigo','Producto', 'Precio 1', 'Precio 2', 'Precio 3', 'Mejor precio', 'Inventario']]}")
     print("\nCSV exportado correctamente")
 
 def NumTable(n1: int, n2: int, n3: int, n: int):
@@ -29,7 +29,7 @@ def BestInventory(df: pd.DataFrame):
     count2 = 0
     count3 = 0
 
-    for p in df['Inventario']:
+    for p in df['Num']:
         if p == '1':
             count1+= 1
         elif p == '2':
@@ -64,7 +64,7 @@ def CompareTables(table: pd.DataFrame):
     
     table['Comparar'] = comp_list
     table['Mejor precio'] = best_price
-    table['Inventario'] = num_table
+    table['Num'] = num_table
 
     return table
 
@@ -75,8 +75,22 @@ def CreateTable(list1: pd.DataFrame, list2: pd.DataFrame, list3: pd.DataFrame):
     _table['Precio 1'] = list1['Precio mensual']
     _table['Precio 2'] = list2['Precio mensual']
     _table['Precio 3'] = list3['Precio mensual']
-    _table['Comparar'] = pd.Series([bool])
     return _table
+
+def BestPriceByInventory(inventory: pd.DataFrame):
+    inventarios = []
+    for i in inventory['Num']:
+        if i == '1':
+            inventarios.append('Inventario 1')
+        elif i == '2':
+            inventarios.append('Inventario 2')
+        elif i == '3':
+            inventarios.append('Inventario 3')
+        else:   print(f'\nOcurrio un error: {i}')
+
+    inventory['Inventario'] = inventarios
+
+    return inventory
 
 if __name__ == '__main__':
     """ Reto: Correr los 3 inventarios al mismo tiempo y 
@@ -89,8 +103,9 @@ if __name__ == '__main__':
     inventory2 = pd.read_csv('lista_productos_2.csv', encoding='utf-8-sig', header=0)
     inventory3 = pd.read_csv('lista_productos_3.csv', encoding='utf-8-sig', header=0)
 
-    nueva_tabla = CreateTable(inventory1, inventory2, inventory3)
-    mejor_tabla = CompareTables(nueva_tabla)
+    df = CreateTable(inventory1, inventory2, inventory3)
+    df_compare = CompareTables(df)
+    df_final = BestPriceByInventory(df_compare)
 
-    PrintTable(mejor_tabla)
-    BestInventory(mejor_tabla)
+    PrintTable(df_final)
+    BestInventory(df_final)
