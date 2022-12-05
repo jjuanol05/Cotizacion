@@ -1,4 +1,6 @@
+import os
 import pandas as pd
+from tkinter.filedialog import askopenfilename
 
 def HigherPrice(n1: int, n2: int):
     if n1 >= n2:
@@ -13,7 +15,7 @@ def BestPrice(n1: int, n2: int, n3: int):
 
 def PrintTable(table: pd.DataFrame):
     table.to_csv(r'C:/Users/ameri/Documents/Inventario/compare_list.csv', index=None, header=True, encoding='utf-8-sig')
-    print(f"\n{table[['Codigo','Producto', 'Precio 1', 'Precio 2', 'Precio 3', 'Mejor precio', 'Inventario']]}")
+    print(f"\n{table[['Código','Producto', 'Precio 1', 'Precio 2', 'Precio 3', 'Mejor precio', 'Inventario']]}")
     print("\nCSV exportado correctamente")
 
 def NumTable(n1: int, n2: int, n3: int, n: int):
@@ -25,57 +27,56 @@ def NumTable(n1: int, n2: int, n3: int, n: int):
         return '3'
 
 def BestInventory(df: pd.DataFrame):
-    count1 = 0
-    count2 = 0
-    count3 = 0
+    count = [0,0,0]
 
     for p in df['Num']:
         if p == '1':
-            count1+= 1
+            count[0]+= 1
         elif p == '2':
-            count2+= 1
+            count[1]+= 1
         elif p == '3':
-            count3+= 1
+            count[2]+= 1
     
-    if count1 > count2:
-        if count1 > count3:
-            print(f'\nEl mejor inventario es el 1.\nTiene {count1} productos más baratos\n')
+    if count[0] > count[1]:
+        if count[0] > count[2]:
+            print(f'\nEl mejor inventario es el 1.\tTiene {count[0]} productos a mejor precio')
+            print(f'\nInventario 2 tiene {count[1]} productos a mejor precio\nInventario 3 tiene {count[2]} productos a mejor precio\n')
         else:
-            print(f'\nEl mejor inventario es el 3.\nTiene {count3} productos más baratos\n')
-    elif count2 > count3:
-        print(f'\nEl mejor inventario es el 2.\nTiene {count2} productos más baratos\n')
+            print(f'\nEl mejor inventario es el 3.\nTiene {count[2]} productos a mejor precio\n')
+    elif count[1] > count[2]:
+        print(f'\nEl mejor inventario es el 2.\nTiene {count[1]} productos a mejor precio\n')
     else:
-        print(f'\nEl mejor inventario es el 3.\nTiene {count3} productos más baratos\n')
-    
-def CompareTables(table: pd.DataFrame):
+        print(f'\nEl mejor inventario es el 3.\nTiene {count[2]} productos a mejor precio\n')
+
+def CrearVector(size: int):
+    vector = []
+    for i in range(size):
+        vector.append(i+1)
+    return vector
+
+def CompareTables(table: pd.DataFrame, num: int):
     size = table['Producto'].__len__()
     best_price = []
     comp_list = []
     num_table = []
 
-    for i in range(0,size):
-        n1 = table['Precio 1'][i]
-        n2 = table['Precio 2'][i]
-        n3 = table['Precio 3'][i]
+    j = iter(CrearVector(num))
+
+    for i in range(0, size):
+        n1 = table[f'Precio {next(j)}'][i]
+        n2 = table[f'Precio {next(j)}'][i]
+        n3 = table[f'Precio {next(j)}'][i]
         n_mejor, opt = BestPrice(n1, n2, n3)
         best_price.append(n_mejor)
         comp_list.append(opt)
         num_table.append(NumTable(n1, n2, n3, n_mejor))
+        j = iter(CrearVector(num))
     
     table['Comparar'] = comp_list
     table['Mejor precio'] = best_price
     table['Num'] = num_table
 
     return table
-
-def CreateTable(list1: pd.DataFrame, list2: pd.DataFrame, list3: pd.DataFrame):
-    _table = pd.DataFrame()
-    _table['Codigo'] = list1['Código']
-    _table['Producto'] = list1['Producto']
-    _table['Precio 1'] = list1['Precio mensual']
-    _table['Precio 2'] = list2['Precio mensual']
-    _table['Precio 3'] = list3['Precio mensual']
-    return _table
 
 def BestPriceByInventory(inventory: pd.DataFrame):
     inventarios = []
@@ -92,20 +93,33 @@ def BestPriceByInventory(inventory: pd.DataFrame):
 
     return inventory
 
+def FilesList(opt):
+    _table = pd.DataFrame()
+
+    for i in range(0, opt):
+        _file = askopenfilename()
+        _inventory = pd.read_csv(f"{_file}", encoding='utf-8-sig', header=0)
+        _table['Código'] = _inventory['Código']
+        _table['Producto'] = _inventory['Producto']
+        _table[f'Precio {i+1}'] = _inventory['Precio mensual']
+
+    return _table
+
 if __name__ == '__main__':
     """ Reto: Correr los 3 inventarios al mismo tiempo y 
     saber cuales son los mejores precios de cada inventario
     
     Comparar producto a producto cual es el mejor precio 
     y exportar cual es el mejor inventario """
-
-    inventory1 = pd.read_csv('lista_productos_1.csv', encoding='utf-8-sig', header=0)
-    inventory2 = pd.read_csv('lista_productos_2.csv', encoding='utf-8-sig', header=0)
-    inventory3 = pd.read_csv('lista_productos_3.csv', encoding='utf-8-sig', header=0)
-
-    df = CreateTable(inventory1, inventory2, inventory3)
-    df_compare = CompareTables(df)
+    
+    os.system('cls')
+    opt = input('\n¿Cuántos inventarios desea analizar? ')
+    while not opt.isdigit():
+        opt = input('\t\t\nError.\nIngrese un número entero\n¿Cuántos inventarios desea analizar? ')
+    
+    opt = int(opt)
+    df = FilesList(opt)
+    df_compare = CompareTables(df, opt)
     df_final = BestPriceByInventory(df_compare)
-
     PrintTable(df_final)
     BestInventory(df_final)
