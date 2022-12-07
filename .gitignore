@@ -2,3 +2,4 @@
 *.png
 compare_list.csv
 *.dia
+/__pycache__
