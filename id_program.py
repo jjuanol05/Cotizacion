@@ -1,0 +1,8 @@
+code = 'Code'
+product = 'Producto'
+price_csv = 'Precio unit'
+price = 'Precio'
+num = 'Num'
+inv = 'Inventario'
+best_price = 'Mejor precio'
+Error1 = 'Ocurrio un error'
