@@ -97,7 +97,7 @@ def BestInventory3(df: DataFrame):
     Args:
         df (DataFrame): DataFrame con los datos obtenidos del análisis 
     """
-    count = np.zeros(3)
+    count = np.zeros(3, int)
 
     for p in df[f'{id.num}']:
         if p == '1':
