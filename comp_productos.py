@@ -67,10 +67,13 @@ def PrintTable3(table: DataFrame):
     export[f"{id.best_price}"] = table[f"{id.best_price}"]
     export[f"{id.num}"] = table[f"{id.num}"]
     export[f"{id.inv}"] = table[f"{id.inv}"]
-
+    
+    filepath = Path('Resultado/out.csv')
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    
     while True:
         try:
-            export.to_csv(r'C:/Users/ameri/Documents/Inventario/test/compare_list.csv', index=None, header=True, encoding='utf-8-sig')
+            export.to_csv(filepath, index=None, header=True, encoding='utf-8-sig')
             print(f"\n{export[[f'{id.product}','Precio 1', 'Precio 2', 'Precio 3', f'{id.best_price}', f'{id.inv}']]}")
             print('\nArchivo compare_list.csv exportado correctamente')
             break
@@ -78,9 +81,7 @@ def PrintTable3(table: DataFrame):
             print(f"\n\t\tCIERRA EL ARCHIVO: compare_list.csv PARA EXPORTARLO Y ESPERA LA CONFIRMACIÓN")
             time.sleep(3)
         except OSError:     # Para Ubuntu
-            filepath = Path('Resultado/out.csv')
-            filepath.parent.mkdir(parents=True, exist_ok=True)
-            export.to_csv(filepath)
+            export.to_csv(filepath, index=None, header=True, encoding='utf-8-sig')
             print(f"\n{export[[f'{id.product}','Precio 1', 'Precio 2', 'Precio 3', f'{id.best_price}', f'{id.inv}']]}")
             print('\nArchivo compare_list.csv exportado correctamente')
             break
