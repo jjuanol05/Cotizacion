@@ -1,5 +1,14 @@
+""" 
+>>> Para MacOS en terminal ejecutar la siguiente linea:
+    brew install python-tk@3.10
+
+>>> Para Ubuntu con Python 3.10, en terminal ejecutar la siguiente linea:
+    sudo apt-get install python3.10-tk
+"""
+
 from tkinter.filedialog import askopenfilename
 from pandas import DataFrame
+from pathlib import Path
 import pandas as pd
 import id_program as id
 import numpy as np
@@ -68,6 +77,13 @@ def PrintTable3(table: DataFrame):
         except PermissionError: 
             print(f"\n\t\tCIERRA EL ARCHIVO: compare_list.csv PARA EXPORTARLO Y ESPERA LA CONFIRMACIÓN")
             time.sleep(3)
+        except OSError:     # Para Ubuntu
+            filepath = Path('Resultado/out.csv')
+            filepath.parent.mkdir(parents=True, exist_ok=True)
+            export.to_csv(filepath)
+            print(f"\n{export[[f'{id.product}','Precio 1', 'Precio 2', 'Precio 3', f'{id.best_price}', f'{id.inv}']]}")
+            print('\nArchivo compare_list.csv exportado correctamente')
+            break
 
 def NumTable3(n1: int, n2: int, n3: int, n: int):
     """Esta función devuelve el número del inventario que contiene el mejor precio
@@ -220,7 +236,7 @@ if __name__ == '__main__':
     Comparar producto a producto cual es el mejor precio 
     y exportar cual es el mejor inventario """
     
-    os.system('cls')
+    os.system(f'{id.clear}')
     while True:
         opt = input("\nElige una opción:\n1) Analizar 3 inventarios\n2) Analizar 5 inventarios\n3) Analizar 10 inventarios:\n")
         if opt == '1' or opt == '2' or opt == '3':
