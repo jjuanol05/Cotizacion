@@ -1,20 +1,12 @@
-""" 
->>> Para MacOS en terminal ejecutar la siguiente linea:
-    brew install python-tk@3.10
-
->>> Para Ubuntu con Python 3.10, en terminal ejecutar la siguiente linea:
-    sudo apt-get install python3.10-tk
-"""
-
 from tkinter.filedialog import askopenfilename
 from pandas import DataFrame
 from pathlib import Path
 import pandas as pd
-import id_program as id
+import global_var as gv
 import numpy as np
 import time, os
 
-def LowerOfTwoPrices(n1: float, n2: float):
+def Min(n1: float, n2: float) -> float|bool:
     """Esta función retorna el precio más bajo y diferente de 0
 
     Args:
@@ -22,7 +14,7 @@ def LowerOfTwoPrices(n1: float, n2: float):
         n2 (float): Segundo precio para a comparar
 
     Returns:
-        float | False: Precio más bajo o False si ambos son 0
+        float | bool: Precio más bajo o False si ambos son 0
     """
     if n1 == 0 and n2 == 0:
         return False 
@@ -42,11 +34,11 @@ def BestPriceOfThree(n1: float, n2: float, n3: float):
         n3 (float): Precio 3 para comparar
 
     Returns:
-        float | False: Precio más bajo o False si son igual a 0
+        float | bool: Precio más bajo o False si son igual a 0
     """
     try:
-        n = LowerOfTwoPrices(n1, n2)
-        n_final = LowerOfTwoPrices(n, n3)
+        n = Min(n1, n2)
+        n_final = Min(n, n3)
         return n_final
     except TypeError:
         return False
@@ -60,31 +52,23 @@ def PrintTable3(table: DataFrame):
     """
     export = DataFrame()
     for i in range(3):
-        export[f"{id.code} {i+1}"] = table[f"{id.code} {i+1}"]
-    export[f"{id.product}"] = table[f"{id.product}"]    
+        export[f"{gv.code} {i+1}"] = table[f"{gv.code} {i+1}"]
+    export[f"{gv.product}"] = table[f"{gv.product}"]    
     for i in range(3):
         export[f"{id.price} {i+1}"] = table[f"{id.price} {i+1}"]
     export[f"{id.best_price}"] = table[f"{id.best_price}"]
     export[f"{id.num}"] = table[f"{id.num}"]
     export[f"{id.inv}"] = table[f"{id.inv}"]
-    
-    filepath = Path('Resultado/out.csv')
-    filepath.parent.mkdir(parents=True, exist_ok=True)
-    
+
     while True:
         try:
-            export.to_csv(filepath, index=None, header=True, encoding='utf-8-sig')
+            export.to_csv(r'C:/Users/ameri/Documents/Inventario/test/compare_list.csv', index=None, header=True, encoding='utf-8-sig')
             print(f"\n{export[[f'{id.product}','Precio 1', 'Precio 2', 'Precio 3', f'{id.best_price}', f'{id.inv}']]}")
             print('\nArchivo compare_list.csv exportado correctamente')
             break
         except PermissionError: 
             print(f"\n\t\tCIERRA EL ARCHIVO: compare_list.csv PARA EXPORTARLO Y ESPERA LA CONFIRMACIÓN")
             time.sleep(3)
-        except OSError:     # Para Ubuntu
-            export.to_csv(filepath, index=None, header=True, encoding='utf-8-sig')
-            print(f"\n{export[[f'{id.product}','Precio 1', 'Precio 2', 'Precio 3', f'{id.best_price}', f'{id.inv}']]}")
-            print('\nArchivo compare_list.csv exportado correctamente')
-            break
 
 def NumTable3(n1: int, n2: int, n3: int, n: int):
     """Esta función devuelve el número del inventario que contiene el mejor precio
@@ -116,7 +100,7 @@ def BestInventory3(df: DataFrame):
     """
     count = np.zeros(3, int)
 
-    for p in df[f'{id.num}']:
+    for p in df[f'{gv.name}']:
         if p == '1':
             count[0]+= 1
         elif p == '2':
@@ -161,24 +145,24 @@ def CompareTables3(table: DataFrame):
     Returns:
         DataFrame: DataFrame que contiene los datos de los 3 inventarios y el de mejor precio
     """
-    size = table[f'{id.product}'].__len__()
+    size = table[f'{gv.product}'].__len__()
     best_price = []
     num_table = []
 
     j = iter(CreateVector(3))
 
     for i in range(0, size):
-        n1 = table[f'{id.price} {next(j)}'][i]
-        n2 = table[f'{id.price} {next(j)}'][i]
-        n3 = table[f'{id.price} {next(j)}'][i]
+        n1 = table[f'{gv.price} {next(j)}'][i]
+        n2 = table[f'{gv.price} {next(j)}'][i]
+        n3 = table[f'{gv.price} {next(j)}'][i]
         n_mejor = BestPriceOfThree(n1, n2, n3)
         if n_mejor:
             best_price.append(n_mejor)
             num_table.append(NumTable3(n1, n2, n3, n_mejor))
         j = iter(CreateVector(3))
     
-    table[f'{id.best_price}'] = best_price
-    table[f'{id.num}'] = num_table
+    table[f'{gv.best_price}'] = best_price
+    table[f'{gv.name}'] = num_table
 
     return table
 
@@ -193,16 +177,16 @@ def BestPriceByInventory3(inventory: DataFrame):
         DataFrame: DataFrame con nueva columna 'Inventario x' 
     """
     inventarios = []
-    for i in inventory[f'{id.num}']:
+    for i in inventory[f'{gv.name}']:
         if i == '1':
-            inventarios.append(f'{id.inv} 1')
+            inventarios.append(f'{gv.inv} 1')
         elif i == '2':
-            inventarios.append(f'{id.inv} 2')
+            inventarios.append(f'{gv.inv} 2')
         elif i == '3':
-            inventarios.append(f'{id.inv} 3')
-        else:   print(f'\n{id.Error1}: {i}')
+            inventarios.append(f'{gv.inv} 3')
+        else:   print(f'\n{gv.Error1}: {i}')
 
-    inventory[f'{id.inv}'] = inventarios
+    inventory[f'{gv.inv}'] = inventarios
 
     return inventory
 
@@ -220,11 +204,11 @@ def FilesList(opt: int):
         try:
             for i in range(opt):
                 _file = askopenfilename()
-                print(f"\nInventario {i+1}: {_file.replace('C:/Users/ameri/Documents/Inventario/Cotizaciones SIMA/', '')}")
+                print(f"\nInventario {i+1}: {_file.replace(gv.path_replace, '')}")
                 _inventory = pd.read_csv(f"{_file}", encoding='utf-8-sig', encoding_errors='replace', header=0)
-                _table[f'{id.code} {i+1}'] = _inventory[f'{id.code}']
-                _table[f'{id.product}'] = _inventory[f'{id.product}']
-                _table[f'{id.price} {i+1}'] = _inventory[f'{id.price_csv}']
+                _table[f'{gv.code} {i+1}'] = _inventory[f'{gv.code}']
+                _table[f'{gv.product}'] = _inventory[f'{gv.product}']
+                _table[f'{gv.price} {i+1}'] = _inventory[f'{gv.price_csv}']
             break
         except FileNotFoundError:
             print('\nSeleccione un archivo .csv')
@@ -237,7 +221,7 @@ if __name__ == '__main__':
     Comparar producto a producto cual es el mejor precio 
     y exportar cual es el mejor inventario """
     
-    os.system(f'{id.clear}')
+    os.system('cls')
     while True:
         opt = input("\nElige una opción:\n1) Analizar 3 inventarios\n2) Analizar 5 inventarios\n3) Analizar 10 inventarios:\n")
         if opt == '1' or opt == '2' or opt == '3':
