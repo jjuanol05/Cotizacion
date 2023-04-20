@@ -4,15 +4,15 @@
 
     Variables globrales para funcionamiento del programa principal
 """
-code = 'Code'
-product = 'Producto'
-price_csv = 'Precio unit'
-price = 'Precio'
-name = 'Cotización'
-inv = 'Inventario'
-best_price = 'Mejor precio'
-clear = 'clear'     # Para MacOs y Linux 'clear' para Windows 'cls'
-Error1 = 'Ocurrio un error'
-# path_replace = 'C:/Users/ameri/Documents/Inventario/Cotizaciones SIMA/' # Para windows
-path_replace = '/home/jjuanol05/Documentos/SIMA/Codigo/Cotizaciones SIMA/'
-path_export = '/home/jjuanol05/Documentos/SIMA/Codigo/Resul/compare_list.csv'
+CODE = 'Code'
+PRODUCT = 'Producto'
+PRICE_CSV = 'Precio unit'
+PRICE = 'Precio'
+NAME = 'Cotización'
+
+TABLE_WITH_BEST_PRICES = 'Mejor precio'
+CLEAR = 'clear'     # Para MacOs y Linux 'clear' para Windows 'cls'
+
+# PATH_REPLACE = 'C:/Users/ameri/Documents/Inventario/Cotizaciones SIMA/' # Para windows
+PATH_REPLACE = '/home/jjuanol05/Documentos/SIMA/Codigo/Cotizaciones SIMA/'
+PATH_EXPORT = 'Resultado/compare_list.csv'
