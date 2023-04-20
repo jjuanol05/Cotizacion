@@ -28,7 +28,7 @@ class Cotizacion():
 
         self.SIZE = self._TABLE[f'{gv.PRODUCT}'].__len__()
 
-    def NameCotiz(self, other, n1: float, n2: float, n: float) -> str|bool:
+    def NameQuote(self, other, n1: float, n2: float, n: float) -> str|bool:
         if n == n1:
             return f'{self.FILE_NAME}'
         elif n == n2:
@@ -36,7 +36,7 @@ class Cotizacion():
         else:
             return False
     
-    def Comparar(self, other) -> str:
+    def Compare(self, other) -> str:
         
         self.FILE_TO_COMPARE = other.FILE_NAME
         self.TABLE_TO_COMPARE = other._TABLE
@@ -53,7 +53,7 @@ class Cotizacion():
                 
                 if best_n:
                     self.table_with_best_prices.append(best_n)
-                    self.table_with_names.append(self.NameCotiz(other, n1, n2, best_n))
+                    self.table_with_names.append(self.NameQuote(other, n1, n2, best_n))
                 else:
                     self.table_with_best_prices.append(None)
                     self.table_with_names.append(None)
