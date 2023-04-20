@@ -52,8 +52,8 @@ def PrintTable3(table: DataFrame):
     """
     export = DataFrame()
     for i in range(3):
-        export[f"{gv.code} {i+1}"] = table[f"{gv.code} {i+1}"]
-    export[f"{gv.product}"] = table[f"{gv.product}"]    
+        export[f"{gv.CODE} {i+1}"] = table[f"{gv.CODE} {i+1}"]
+    export[f"{gv.PRODUCT}"] = table[f"{gv.PRODUCT}"]    
     for i in range(3):
         export[f"{id.price} {i+1}"] = table[f"{id.price} {i+1}"]
     export[f"{id.best_price}"] = table[f"{id.best_price}"]
@@ -100,7 +100,7 @@ def BestInventory3(df: DataFrame):
     """
     count = np.zeros(3, int)
 
-    for p in df[f'{gv.name}']:
+    for p in df[f'{gv.NAME}']:
         if p == '1':
             count[0]+= 1
         elif p == '2':
@@ -145,24 +145,24 @@ def CompareTables3(table: DataFrame):
     Returns:
         DataFrame: DataFrame que contiene los datos de los 3 inventarios y el de mejor precio
     """
-    size = table[f'{gv.product}'].__len__()
+    size = table[f'{gv.PRODUCT}'].__len__()
     best_price = []
     num_table = []
 
     j = iter(CreateVector(3))
 
     for i in range(0, size):
-        n1 = table[f'{gv.price} {next(j)}'][i]
-        n2 = table[f'{gv.price} {next(j)}'][i]
-        n3 = table[f'{gv.price} {next(j)}'][i]
+        n1 = table[f'{gv.PRICE} {next(j)}'][i]
+        n2 = table[f'{gv.PRICE} {next(j)}'][i]
+        n3 = table[f'{gv.PRICE} {next(j)}'][i]
         n_mejor = BestPriceOfThree(n1, n2, n3)
         if n_mejor:
             best_price.append(n_mejor)
             num_table.append(NumTable3(n1, n2, n3, n_mejor))
         j = iter(CreateVector(3))
     
-    table[f'{gv.best_price}'] = best_price
-    table[f'{gv.name}'] = num_table
+    table[f'{gv.TABLE_WITH_BEST_PRICES}'] = best_price
+    table[f'{gv.NAME}'] = num_table
 
     return table
 
@@ -177,7 +177,7 @@ def BestPriceByInventory3(inventory: DataFrame):
         DataFrame: DataFrame con nueva columna 'Inventario x' 
     """
     inventarios = []
-    for i in inventory[f'{gv.name}']:
+    for i in inventory[f'{gv.NAME}']:
         if i == '1':
             inventarios.append(f'{gv.inv} 1')
         elif i == '2':
@@ -204,11 +204,11 @@ def FilesList(opt: int):
         try:
             for i in range(opt):
                 _file = askopenfilename()
-                print(f"\nInventario {i+1}: {_file.replace(gv.path_replace, '')}")
+                print(f"\nInventario {i+1}: {_file.replace(gv.PATH_REPLACE, '')}")
                 _inventory = pd.read_csv(f"{_file}", encoding='utf-8-sig', encoding_errors='replace', header=0)
-                _table[f'{gv.code} {i+1}'] = _inventory[f'{gv.code}']
-                _table[f'{gv.product}'] = _inventory[f'{gv.product}']
-                _table[f'{gv.price} {i+1}'] = _inventory[f'{gv.price_csv}']
+                _table[f'{gv.CODE} {i+1}'] = _inventory[f'{gv.CODE}']
+                _table[f'{gv.PRODUCT}'] = _inventory[f'{gv.PRODUCT}']
+                _table[f'{gv.PRICE} {i+1}'] = _inventory[f'{gv.PRICE_CSV}']
             break
         except FileNotFoundError:
             print('\nSeleccione un archivo .csv')
