@@ -10,7 +10,7 @@ PRICE_CSV = 'Precio unit'
 PRICE = 'Precio'
 NAME = 'Cotización'
 
-TABLE_WITH_BEST_PRICES = 'Mejor precio'
+BEST_PRICE = 'Mejor precio'
 CLEAR = 'clear'     # Para MacOs y Linux 'clear' para Windows 'cls'
 
 # PATH_REPLACE = 'C:/Users/ameri/Documents/Inventario/Cotizaciones SIMA/' # Para windows
