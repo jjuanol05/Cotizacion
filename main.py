@@ -4,7 +4,7 @@
 # Install pathlib   with pip install pathlib
 
 from tkinter.filedialog import askopenfilename
-import cotizacion as ct
+from QuoteObject import QuoteObject
 import global_var as gv
 import os
 
@@ -16,26 +16,26 @@ import os
 
 os.system(gv.CLEAR)
 
-def Compare3(file1, file2, file3):
+def compare_three_quotes(filepath1: str, filepath2: str, filepath3: str):
     
-    cot1 = ct.Cotizacion(file1)
-    cot2 = ct.Cotizacion(file2)
-    cot3 = ct.Cotizacion(file3)
+    quote_a = QuoteObject(filepath1)
+    quote_b = QuoteObject(filepath2)
+    quote_c = QuoteObject(filepath3)
 
-    file = cot1.Compare(cot2)
+    filepath = quote_a.compare(quote_b)
     
-    if  file == file1:
-        print(f'\nCOMPARACIÓN 1:\n{cot1}')
-        file = cot1.Compare(cot3)
-        print(f'\nCOMPARACIÓN 2:\n{cot1}')
+    if  filepath == filepath1:
+        print(f'\nCOMPARACIÓN 1:\n{quote_a}')
+        filepath = quote_a.compare(quote_c)
+        print(f'\nCOMPARACIÓN 2:\n{quote_a}')
 
-    elif file == file2:
-        cot2.Compare(cot1)
-        print(f'\nCOMPARACIÓN 1:\n{cot2}')
-        file = cot2.Compare(cot3)
-        print(f'\nCOMPARACIÓN 2:\n{cot2}')
+    elif filepath == filepath2:
+        quote_b.compare(quote_a)
+        print(f'\nCOMPARACIÓN 1:\n{quote_b}')
+        filepath = quote_b.compare(quote_c)
+        print(f'\nCOMPARACIÓN 2:\n{quote_b}')
     
-    return file
+    return filepath
 
 try:
     # file1 = askopenfilename()
@@ -48,9 +48,9 @@ try:
     file4 = '/home/jjuanol05/Documentos/SIMA/Codigo/Cotizaciones SIMA/Cotizacion Tamex 2087708.csv'
     file5 = '/home/jjuanol05/Documentos/SIMA/Codigo/Cotizaciones SIMA/641122.csv'
 
-    file = Compare3(file1, file2, file3)
+    file = compare_three_quotes(file1, file2, file3)
 
-    file_final = Compare3(file, file4, file5)
+    file_final = compare_three_quotes(file, file4, file5)
 
 except IndexError:
     print(f'\nNO SE PUDEN COMPARAR COTIZACIONES, NúMERO DE PRODUCTOS DIFERENTES\nIntente de nuevo')
